@@ -30,7 +30,7 @@ let choreId = 1
 
 
 server.get('/', (req, res) => {
-    res.status(200).json({ message: 'welcome to the server'})
+    res.status(200).json({ message: 'welcome to the server', people})
     // res.status(200).json(people)
 })
 
@@ -109,15 +109,15 @@ server.get('/:id/chores', (req, res) => {
 
 server.get('/chores', (req, res) => {
     let completed = req.query.completed
+    // const { description, notes, assignedTo, completed } = req.body
     
-    console.log(completed)
+    
     if (completed) {
+        console.log("query", req.query.completed)
         const filter = completed === 'true' ? true : false
-        const result = chores.filter(chore => chore.completed == completed)
+        const result = chores.filter(chore => chore.completed === filter)
         res.status(200).json(result)
-    } else {
-        res.status(200).json(chores)
-    }
+    } 
     
 })
 
