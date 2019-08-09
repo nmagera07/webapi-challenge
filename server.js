@@ -89,15 +89,9 @@ server.put('/chores/:id', (req, res) => {
     }
 })
 
-server.get('/chores/:id', (req, res) => {
+server.get(':id/chores', (req, res) => {
     const { id } = req.params
-    const findChore = chore => {
-        return chore.id == id
-    }
-
-    const foundChore = chores.find(findChore)
-    
-    console.log(req.body)
+   const foundChore = chores.find(chore => chore.id == id)
     
     if (foundChore) {
         
@@ -110,11 +104,11 @@ server.get('/chores/:id', (req, res) => {
     }
 })
 
-server.get(`/chores?completed=`, (req, res) => {
-    req.completed = req.query.completed
-    console.log(req.completed)
-
-    if (completed === true) {
+server.get('/chores', (req, res) => {
+    let completed = req.query.completed
+    
+    console.log(completed)
+    if (completed === 'true') {
         res.status(200).json(chores)
     } else {
         res.status(200).json([])
