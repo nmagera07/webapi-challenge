@@ -7,30 +7,30 @@ server.use(express.json())
 const people = [
     {
         id: 1,
-        people: 'person1'
+        name: 'person1'
     },
     {
         id: 2,
-        people: 'person2'
+        name: 'person2'
     },
     {
         id: 3,
-        people: 'person3'
+        name: 'person3'
     },
     {
         id: 4,
-        people: 'person4'
+        name: 'person4'
     },
 ]
 
 const chores = [
-    {
-        id: 1,
-        description: '',
-        notes: '',
-        assignedTo: people.id,
-        completed: false
-    },
+    // {
+    //     id: 1,
+    //     description: '',
+    //     notes: '',
+    //     assignedTo: people.id,
+    //     completed: false
+    // },
 ]
 
 server.get('/', (req, res) => {
@@ -47,17 +47,17 @@ server.get('/chores', (req, res) => {
 })
 
 server.post('/chores', (req, res) => {
-    const { id } = req.params
+    // const total = chores.push(chores)
     if (chores) {
-        res.status(201).chores.push(chores)
+        res.status(201).json(chores)
     } else {
         res.status(500).json({ error: 'Cannot add to list of chores.'})
     }
 })
 
 server.delete('/chores/:id', (req, res) => {
-    if (chores) {
-        res.status(201).json(chores)
+    if (chores.id) {
+        res.status(200).json(chores)
     } else {
         res.status(500).json({ error: 'Cannot delete chore. '})
     }
@@ -65,7 +65,7 @@ server.delete('/chores/:id', (req, res) => {
 
 server.put('chores/:id', (req, res) => {
     if (chores) {
-        res.status(200).json(chores)
+        res.status(200).json(chores.pop(chores))
     } else {
         res.status(500).json({ error: 'Cannot update chore. '})
     }
