@@ -23,11 +23,9 @@ let people = [
     },
 ]
 
-let chores = [
-    
-]
+let chores = []
 
-let choreId = chores.length
+let choreId = 1
 
 
 
@@ -46,16 +44,16 @@ server.get('/chores', (req, res) => {
 
 server.post('/chores', (req, res) => {
     const { description, notes, assignedTo, completed } = req.body
-    const body = {id: choreId, description, notes, assignedTo: chores.length, completed: false}
+    const body = {id: choreId, description, notes, assignedTo: chores.length, completed}
     if (!description) {
         res.status(404).json({ error: 'Description is needed to add a chore. '})
     }
-    if (chores) {
-        chores.push(body)
+    if (choreId) {
         choreId++
+        chores.push(body)
         res.status(201).json(chores)
     } else {
-        res.status(500).json({ error: 'Cannot add to list of chores.'})
+        res.status(400).json({ error: 'Cannot find that ID'})
     }
 })
 
@@ -81,25 +79,30 @@ server.put('/chores/:id', (req, res) => {
 
     const foundChore = chores.find(findChore)
     if (foundChore) {
-        if (description) foundChore.description = description
-        if (notes) foundChore.notes = notes
+        if (description) {
+            foundChore.description = description
+        }
+        if (notes) {
+            foundChore.notes = notes
+        }
         res.status(200).json(chores)
     } else {
         res.status(500).json({ error: 'Cannot update chore. '})
     }
 })
 
-server.get(':id/chores', (req, res) => {
+server.get('/:id/chores', (req, res) => {
     const { id } = req.params
-   const foundChore = chores.find(chore => chore.id == id)
-    
-    if (foundChore) {
+    const foundPerson = people.find(person => person.id == id)
+    const filteredChore = chores.filter(chore => chore.assignedTo == foundPerson.id)
+    const noChore = chores.filter(chore => chore.assignedTo == 0)
+    if (foundPerson.id == id) {
         
-        res.status(200).json(chores)
+        res.status(200).json(filteredChore)
     } else  {
         res.status(404).json({ error: 'Person could not be found.'})
     } 
-    if (!chores) {
+    if (noChore) {
         res.status(200).json([])
     }
 })
@@ -108,14 +111,14 @@ server.get('/chores', (req, res) => {
     let completed = req.query.completed
     
     console.log(completed)
-    if (completed === 'true') {
-        res.status(200).json(chores)
+    if (completed) {
+        const filter = completed === 'true' ? true : false
+        const result = chores.filter(chore => chore.completed == completed)
+        res.status(200).json(result)
     } else {
-        res.status(200).json([])
-    }
-    if (completed === '') {
         res.status(200).json(chores)
     }
+    
 })
 
 
