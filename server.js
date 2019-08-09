@@ -72,10 +72,13 @@ server.put('chores/:id', (req, res) => {
 })
 
 server.get('/:id/chores', (req, res) => {
-    if (chores) {
+    if (person.id) {
         res.status(200).json(chores)
-    } else {
-        
+    } else if (!person.id) {
+        res.status(404).json({ error: 'Person could not be found.'})
+    } 
+    if (!chores) {
+        res.status(200).json([])
     }
 })
 
