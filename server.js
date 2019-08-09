@@ -4,7 +4,7 @@ const server = express()
 
 server.use(express.json())
 
-const people = [
+let people = [
     {
         id: 1,
         name: 'person1'
@@ -23,15 +23,13 @@ const people = [
     },
 ]
 
-const chores = [
-    // {
-    //     id: 1,
-    //     description: '',
-    //     notes: '',
-    //     assignedTo: people.id,
-    //     completed: false
-    // },
+let chores = [
+    
 ]
+
+let choreId = chores.length
+
+
 
 server.get('/', (req, res) => {
     res.status(200).json({ message: 'welcome to the server'})
@@ -47,8 +45,12 @@ server.get('/chores', (req, res) => {
 })
 
 server.post('/chores', (req, res) => {
-    // const total = chores.push(chores)
+    const { description, notes, assignedTo, completed } = req.body
+    const body = {id: choreId, description, notes, assignedTo: chores.length, completed: false}
+    console.log(body.assignedTo)
     if (chores) {
+        chores.push(body)
+        choreId++
         res.status(201).json(chores)
     } else {
         res.status(500).json({ error: 'Cannot add to list of chores.'})
@@ -56,30 +58,51 @@ server.post('/chores', (req, res) => {
 })
 
 server.delete('/chores/:id', (req, res) => {
-    if (chores.id) {
+    const { id } = req.params
+    const foundChore = chores.find(chore => chore.id == id)
+
+    if (foundChore) {
+        chores = chores.filter(chore => chore.id != id)
         res.status(200).json(chores)
     } else {
-        res.status(500).json({ error: 'Cannot delete chore. '})
+        res.status(500).json({ error: 'No chore could be found for that ID'})
     }
+
 })
 
 server.put('chores/:id', (req, res) => {
-    if (chores) {
-        res.status(200).json(chores.pop(chores))
+    const { id } = req.params
+    const { description, notes} = req.body
+    const findChore = chore => {
+        return chore.id == id
+    }
+
+    const foundChore = chores.find(findChore)
+    if (foundChore) {
+        if (description) foundChore.description = description
+        if (notes) foundChore.notes = notes
+        res.status(200).json(chores)
     } else {
         res.status(500).json({ error: 'Cannot update chore. '})
     }
 })
 
-server.get('/:id/chores', (req, res) => {
-    if (person.id) {
+server.get('chores/:id', (req, res) => {
+    const { id } = req.params
+    console.log(req.body.assignedTo)
+    
+    if (req.body.assignedTo === id) {
         res.status(200).json(chores)
-    } else if (!person.id) {
+    } else  {
         res.status(404).json({ error: 'Person could not be found.'})
     } 
     if (!chores) {
         res.status(200).json([])
     }
+})
+
+server.get(`/?completed=`, (req, res) => {
+    complete = false
 })
 
 
