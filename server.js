@@ -47,7 +47,9 @@ server.get('/chores', (req, res) => {
 server.post('/chores', (req, res) => {
     const { description, notes, assignedTo, completed } = req.body
     const body = {id: choreId, description, notes, assignedTo: chores.length, completed: false}
-    console.log(body.assignedTo)
+    if (!description) {
+        res.status(404).json({ error: 'Description is needed to add a chore. '})
+    }
     if (chores) {
         chores.push(body)
         choreId++
@@ -70,7 +72,7 @@ server.delete('/chores/:id', (req, res) => {
 
 })
 
-server.put('chores/:id', (req, res) => {
+server.put('/chores/:id', (req, res) => {
     const { id } = req.params
     const { description, notes} = req.body
     const findChore = chore => {
@@ -87,11 +89,18 @@ server.put('chores/:id', (req, res) => {
     }
 })
 
-server.get('chores/:id', (req, res) => {
+server.get('/chores/:id', (req, res) => {
     const { id } = req.params
-    console.log(req.body.assignedTo)
+    const findChore = chore => {
+        return chore.id == id
+    }
+
+    const foundChore = chores.find(findChore)
     
-    if (req.body.assignedTo === id) {
+    console.log(req.body)
+    
+    if (foundChore) {
+        
         res.status(200).json(chores)
     } else  {
         res.status(404).json({ error: 'Person could not be found.'})
@@ -101,8 +110,18 @@ server.get('chores/:id', (req, res) => {
     }
 })
 
-server.get(`/?completed=`, (req, res) => {
-    complete = false
+server.get(`/chores?completed=`, (req, res) => {
+    req.completed = req.query.completed
+    console.log(req.completed)
+
+    if (completed === true) {
+        res.status(200).json(chores)
+    } else {
+        res.status(200).json([])
+    }
+    if (completed === '') {
+        res.status(200).json(chores)
+    }
 })
 
 

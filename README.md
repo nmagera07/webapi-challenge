@@ -40,13 +40,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+Middleware and Express Routers. 
+
 - [ ] What is Express Middleware?
+
+  Express middleware is used to basically intercept a request and do something to that request before it is completed, eg: validate a user/password
 
 - [ ] How can a client send data to an API?
 
+Using HTTP methods such as: GET, POST, PUT, DELETE
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+Usually a 200 request, saying the request was completed
+
 - [ ] What Express feature can we use to partition an application into sub-applications?
+
+Express Router. 
 
 ## Minimum Viable Product
 
