@@ -107,15 +107,16 @@ server.get('/:id/chores', (req, res) => {
     }
 })
 
-server.get('/chores', (req, res) => {
+server.get('/chores/modifiedchores', (req, res) => {
     let completed = req.query.completed
-    // const { description, notes, assignedTo, completed } = req.body
+    console.log(req.query)
     
     
-    if (completed) {
-        console.log("query", req.query.completed)
-        const filter = completed === 'true' ? true : false
-        const result = chores.filter(chore => chore.completed === filter)
+    if (completed.length) {
+        // console.log("query", req.query.completed)
+        // const filter = completed === 'true' ? true : false
+        const result = chores.filter(chore => chore.completed == completed)
+        console.log(result)
         res.status(200).json(result)
     } 
     
